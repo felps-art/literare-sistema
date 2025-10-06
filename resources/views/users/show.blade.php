@@ -22,7 +22,12 @@
 
                 <!-- Informações principais -->
                 <div class="col">
-                    <h1 class="h2 fw-bold mb-2">{{ $user->name }}</h1>
+                    <h1 class="h2 fw-bold mb-2">
+                        {{ $user->name }}
+                        @if($user->is_admin)
+                            <span class="badge bg-danger ms-2">Administrador</span>
+                        @endif
+                    </h1>
                     <p class="text-muted mb-4">{{ $user->email }}</p>
                     
                     <!-- Estatísticas -->

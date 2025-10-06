@@ -22,7 +22,9 @@ class AutorSeeder extends Seeder
         ];
 
         foreach ($autores as $autor) {
-            Autor::create($autor);
+            Autor::updateOrCreate([
+                'codigo' => $autor['codigo'],
+            ], $autor);
         }
     }
 }

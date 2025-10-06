@@ -19,26 +19,71 @@ class FollowSeeder extends Seeder
             return; // Precisa de pelo menos 2 usuários para criar relacionamentos
         }
 
-        // Criar alguns relacionamentos de follow de exemplo
-        $relationships = [
-            // Felipe segue outros usuários
-            ['follower_id' => 2, 'followed_id' => 1], // Felipe segue Tiago
-            
-            // Tiago segue Felipe de volta
-            ['follower_id' => 1, 'followed_id' => 2], // Tiago segue Felipe
+        // Relações dinâmicas entre usuários recém-criados e os dois primeiros (Tiago e Felipe)
+        $emails = [
+            'tiago.rios@ibiruba.ifrs.edu.br', // Tiago
+            'felipe@felipe', // Felipe
+            'ana@ana',
+            'cara@cara',
+            'rafa@rafa',
+            'thigas@thigas',
+            'isamel@isamel',
+            'gusta@gusta',
+            'krammes@krammes',
         ];
 
-        foreach ($relationships as $relationship) {
-            // Verificar se os usuários existem e se o relacionamento já não existe
-            if (User::find($relationship['follower_id']) && 
-                User::find($relationship['followed_id']) &&
-                !DB::table('user_relationships')
-                    ->where('follower_id', $relationship['follower_id'])
-                    ->where('followed_id', $relationship['followed_id'])
-                    ->exists()) {
-                
-                DB::table('user_relationships')->insert($relationship);
+        // Map emails to ids (ignore missing)
+        $map = [];
+        foreach ($emails as $email) {
+            $u = User::where('email', $email)->first();
+            if ($u) {
+                $map[$email] = $u->id;
             }
+        }
+
+        // If Tiago and Felipe exist, create mutual follows with others
+        $tiagoId = $map['tiago.rios@ibiruba.ifrs.edu.br'] ?? null;
+        $felipeId = $map['felipe@felipe'] ?? null;
+
+        foreach ($map as $email => $id) {
+            // skip Tiago and Felipe for this loop
+            if ($id === $tiagoId || $id === $felipeId) {
+                continue;
+            }
+
+            // User follows Felipe and Tiago if they exist
+            if ($felipeId) {
+                DB::table('user_relationships')->updateOrInsert([
+                    'follower_id' => $id,
+                    'followed_id' => $felipeId,
+                ], []);
+            }
+            if ($tiagoId) {
+                DB::table('user_relationships')->updateOrInsert([
+                    'follower_id' => $id,
+                    'followed_id' => $tiagoId,
+                ], []);
+            }
+
+            // Felipe follows them back
+            if ($felipeId) {
+                DB::table('user_relationships')->updateOrInsert([
+                    'follower_id' => $felipeId,
+                    'followed_id' => $id,
+                ], []);
+            }
+        }
+
+        // Ensure Tiago and Felipe follow each other
+        if ($tiagoId && $felipeId) {
+            DB::table('user_relationships')->updateOrInsert([
+                'follower_id' => $tiagoId,
+                'followed_id' => $felipeId,
+            ], []);
+            DB::table('user_relationships')->updateOrInsert([
+                'follower_id' => $felipeId,
+                'followed_id' => $tiagoId,
+            ], []);
         }
     }
 }

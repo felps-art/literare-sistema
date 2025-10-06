@@ -27,7 +27,15 @@ class LikesTableSeeder extends Seeder
 
         foreach($listaUsuarios as $umUsuario){
             //preste atenção em como eu faço o "vínculo" entre o usuário e o post
-            $umUsuario->likedPosts()->attach($listaPosts->random($listaPosts->count()/2));
+                if ($listaPosts->isEmpty()) {
+                    continue;
+                }
+
+                $pick = max(1, (int) floor($listaPosts->count() / 2));
+                $randomPosts = $listaPosts->random($pick)->pluck('id')->all();
+
+                // attach likes without duplicating existing ones
+                $umUsuario->likedPosts()->syncWithoutDetaching($randomPosts);
         }
 
         //percorro a lista de posts, verifico a quantidade de likes existem no relacionamento

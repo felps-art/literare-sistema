@@ -25,7 +25,8 @@ class User extends Authenticatable
         'address',
         'whatsapp',
         'instagram',
-        'description_profile'
+        'description_profile',
+        'is_admin'
     ];
 
     // Atributos que devem ser ocultados quando o objeto for convertido para array ou JSON

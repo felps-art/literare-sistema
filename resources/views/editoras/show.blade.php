@@ -4,12 +4,14 @@
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold">Editora: {{ $editora->nome }}</h1>
     <div class="flex gap-2">
-        <a href="{{ route('editoras.edit',$editora) }}" class="px-3 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Editar</a>
-        <form action="{{ route('editoras.destroy',$editora) }}" method="POST" onsubmit="return confirm('Excluir esta editora?');">
-            @csrf
-            @method('DELETE')
-            <button class="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700">Excluir</button>
-        </form>
+        @if(auth()->check() && auth()->user()->is_admin)
+            <a href="{{ route('editoras.edit',$editora) }}" class="px-3 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Editar</a>
+            <form action="{{ route('editoras.destroy',$editora) }}" method="POST" onsubmit="return confirm('Excluir esta editora?');">
+                @csrf
+                @method('DELETE')
+                <button class="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700">Excluir</button>
+            </form>
+        @endif
         <a href="{{ route('editoras.index') }}" class="px-3 py-2 border rounded">Voltar</a>
     </div>
 </div>

@@ -9,6 +9,12 @@ use Illuminate\View\View;
 
 class EditoraController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(\App\Http\Middleware\AdminMiddleware::class)->only([
+            'create', 'store', 'edit', 'update', 'destroy'
+        ]);
+    }
     public function index(): View
     {
         $editoras = Editora::withCount('livros')->orderBy('nome')->paginate(10);

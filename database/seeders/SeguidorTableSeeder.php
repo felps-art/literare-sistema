@@ -19,8 +19,21 @@ class SeguidorTableSeeder extends Seeder
         //faço um laço de repetição em que para cada usuário
         //eu faço o vínculo com uma série de outros usuários
         //pra eu criar o relacionamento de seguindo/seguidores
-        foreach($listaUsuarios as $umUsuario){
-            $umUsuario->follows()->attach($listaUsuarios->random(rand(3,$listaUsuarios->count()-1)));
+        foreach ($listaUsuarios as $umUsuario) {
+            // prepare an array of other user ids (exclude self)
+            $possible = $listaUsuarios->where('id', '!=', $umUsuario->id)->pluck('id')->all();
+            $countPossible = count($possible);
+            if ($countPossible === 0) {
+                continue;
+            }
+
+            // choose between 1 and min(3, countPossible) random ids
+            $pick = rand(1, min(3, $countPossible));
+            shuffle($possible);
+            $randomIds = array_slice($possible, 0, $pick);
+
+            // attach without duplicating existing relationships
+            $umUsuario->follows()->syncWithoutDetaching($randomIds);
         }
     }
 }

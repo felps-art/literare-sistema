@@ -219,6 +219,14 @@
                         <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-users me-2"></i>Descobrir Leitores
                         </a>
+                            @if(auth()->check() && auth()->user()->is_admin)
+                                <a href="{{ route('autores.index') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-user-edit me-2"></i>Autores
+                                </a>
+                                <a href="{{ route('editoras.index') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-building me-2"></i>Editoras
+                                </a>
+                            @endif
                     </div>
                 </div>
             </div>

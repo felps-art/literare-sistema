@@ -10,6 +10,13 @@ use Illuminate\Http\Request;
 
 class LivroController extends Controller
 {
+    public function __construct()
+    {
+        // Apenas administradores podem criar, editar e excluir livros
+        $this->middleware(\App\Http\Middleware\AdminMiddleware::class)->only([
+            'create', 'store', 'edit', 'update', 'destroy'
+        ]);
+    }
     public function index()
     {
         $livros = Livro::with(['editora', 'autores', 'resenhas'])

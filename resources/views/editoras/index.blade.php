@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold">Editoras</h1>
-    <a href="{{ route('editoras.create') }}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Nova Editora</a>
+    @if(auth()->check() && auth()->user()->is_admin)
+        <a href="{{ route('editoras.create') }}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Nova Editora</a>
+    @endif
 </div>
 
 @if(session('success'))
@@ -28,12 +30,14 @@
                 <td class="p-2">{{ $editora->livros_count }}</td>
                 <td class="p-2 flex gap-2">
                     <a href="{{ route('editoras.show',$editora) }}" class="text-blue-600 hover:underline">Ver</a>
-                    <a href="{{ route('editoras.edit',$editora) }}" class="text-yellow-600 hover:underline">Editar</a>
-                    <form action="{{ route('editoras.destroy',$editora) }}" method="POST" onsubmit="return confirm('Excluir esta editora?');">
-                        @csrf
-                        @method('DELETE')
-                        <button class="text-red-600 hover:underline">Excluir</button>
-                    </form>
+                    @if(auth()->check() && auth()->user()->is_admin)
+                        <a href="{{ route('editoras.edit',$editora) }}" class="text-yellow-600 hover:underline">Editar</a>
+                        <form action="{{ route('editoras.destroy',$editora) }}" method="POST" onsubmit="return confirm('Excluir esta editora?');">
+                            @csrf
+                            @method('DELETE')
+                            <button class="text-red-600 hover:underline">Excluir</button>
+                        </form>
+                    @endif
                 </td>
             </tr>
         @empty

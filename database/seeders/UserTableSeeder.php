@@ -14,31 +14,126 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //crio um usuário com os meus dados para eu testar a aplicação
-        User::create([
-            'name' => 'Tiago Rios da Rocha',
-            'image_profile' => 'default-user.png',
-            'description_profile' => 'Professor IFRS - Ibirubá',
-            'address' => "Ibirubá",
-            'whatsapp' => "999999999",
-            'instagram' => "@tiagoriosrocha",
-            'email' => 'tiago.rios@ibiruba.ifrs.edu.br',
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
-        ]);
-
-        // Usuário Felipe
-        User::create([
+        // Usuário administrador
+        User::updateOrCreate([
+            'email' => 'felipe@felipe',
+        ], [
             'name' => 'felipe',
             'image_profile' => 'default-user.png',
             'description_profile' => 'Usuário teste',
             'address' => "São Paulo",
             'whatsapp' => "11999999999",
             'instagram' => "@felipe",
-            'email' => 'felipe@felipe',
             'email_verified_at' => now(),
             'password' => bcrypt('felipe123'),
+            'is_admin' => true,
+            'remember_token' => Str::random(10),
+        ]);
+
+        // Usuário administrador
+        User::updateOrCreate([
+            'email' => 'ana@ana',
+        ], [
+            'name' => 'ana',
+            'image_profile' => 'default-user.png',
+            'description_profile' => 'Usuário teste',
+            'address' => 'Cidade A',
+            'whatsapp' => '11990000001',
+            'instagram' => '@ana',
+            'email_verified_at' => now(),
+            'password' => bcrypt('ana123'),
+            'is_admin' => true,
+            'remember_token' => Str::random(10),
+        ]);
+
+        // Outros usuários (padronizados)
+        User::updateOrCreate([
+            'email' => 'cara@cara',
+        ], [
+            'name' => 'çara',
+            'image_profile' => 'default-user.png',
+            'description_profile' => 'Usuário teste',
+            'address' => 'Cidade B',
+            'whatsapp' => '11990000002',
+            'instagram' => '@cara',
+            'email_verified_at' => now(),
+            'password' => bcrypt('çara123'),
+            'is_admin' => false,
+            'remember_token' => Str::random(10),
+        ]);
+
+        User::updateOrCreate([
+            'email' => 'rafa@rafa',
+        ], [
+            'name' => 'rafa',
+            'image_profile' => 'default-user.png',
+            'description_profile' => 'Usuário teste',
+            'address' => 'Cidade C',
+            'whatsapp' => '11990000003',
+            'instagram' => '@rafa',
+            'email_verified_at' => now(),
+            'password' => bcrypt('rafa123'),
+            'is_admin' => false,
+            'remember_token' => Str::random(10),
+        ]);
+
+        User::updateOrCreate([
+            'email' => 'thigas@thigas',
+        ], [
+            'name' => 'thigas',
+            'image_profile' => 'default-user.png',
+            'description_profile' => 'Usuário teste',
+            'address' => 'Cidade D',
+            'whatsapp' => '11990000004',
+            'instagram' => '@thigas',
+            'email_verified_at' => now(),
+            'password' => bcrypt('thigas123'),
+            'is_admin' => false,
+            'remember_token' => Str::random(10),
+        ]);
+
+        User::updateOrCreate([
+            'email' => 'isamel@isamel',
+        ], [
+            'name' => 'isamel',
+            'image_profile' => 'default-user.png',
+            'description_profile' => 'Usuário teste',
+            'address' => 'Cidade E',
+            'whatsapp' => '11990000005',
+            'instagram' => '@isamel',
+            'email_verified_at' => now(),
+            'password' => bcrypt('isamel123'),
+            'is_admin' => false,
+            'remember_token' => Str::random(10),
+        ]);
+
+        User::updateOrCreate([
+            'email' => 'gusta@gusta',
+        ], [
+            'name' => 'gusta',
+            'image_profile' => 'default-user.png',
+            'description_profile' => 'Usuário teste',
+            'address' => 'Cidade F',
+            'whatsapp' => '11990000006',
+            'instagram' => '@gusta',
+            'email_verified_at' => now(),
+            'password' => bcrypt('gusta123'),
+            'is_admin' => false,
+            'remember_token' => Str::random(10),
+        ]);
+
+        User::updateOrCreate([
+            'email' => 'krammes@krammes',
+        ], [
+            'name' => 'krammes',
+            'image_profile' => 'default-user.png',
+            'description_profile' => 'Usuário teste',
+            'address' => 'Cidade G',
+            'whatsapp' => '11990000007',
+            'instagram' => '@krammes',
+            'email_verified_at' => now(),
+            'password' => bcrypt('krammes123'),
+            'is_admin' => false,
             'remember_token' => Str::random(10),
         ]);
 

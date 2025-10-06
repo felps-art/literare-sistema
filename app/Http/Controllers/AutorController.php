@@ -10,6 +10,12 @@ use Illuminate\View\View;
 
 class AutorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(\App\Http\Middleware\AdminMiddleware::class)->only([
+            'create', 'store', 'edit', 'update', 'destroy'
+        ]);
+    }
     /**
      * Lista autores com contagem de livros associados.
      */
