@@ -12,6 +12,10 @@ class DatabaseSeeder extends Seeder
             StatusLeituraSeeder::class,
             EditoraSeeder::class,
             AutorSeeder::class,
+            LivroSeeder::class,
+            UserTableSeeder::class, // garante usuários principais
+            PostSeeder::class,
+            ResenhaSeeder::class,
         ]);
     }
 }

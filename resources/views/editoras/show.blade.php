@@ -1,40 +1,68 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Editora: {{ $editora->nome }}</h1>
-    <div class="flex gap-2">
-        @if(auth()->check() && auth()->user()->is_admin)
-            <a href="{{ route('editoras.edit',$editora) }}" class="px-3 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Editar</a>
-            <form action="{{ route('editoras.destroy',$editora) }}" method="POST" onsubmit="return confirm('Excluir esta editora?');">
-                @csrf
-                @method('DELETE')
-                <button class="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700">Excluir</button>
-            </form>
-        @endif
-        <a href="{{ route('editoras.index') }}" class="px-3 py-2 border rounded">Voltar</a>
+<div class="parchment-panel soft-shadow mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-2">
+        <h1 class="brand-font mb-0" style="color: var(--old-ink);">Editora: {{ $editora->nome }}</h1>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ route('editoras.index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
+            @if(auth()->check() && auth()->user()->is_admin)
+                <a href="{{ route('editoras.edit',$editora) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit me-1"></i>Editar</a>
+                <form action="{{ route('editoras.destroy',$editora) }}" method="POST" onsubmit="return confirm('Excluir esta editora?');" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-outline-danger btn-sm" type="submit"><i class="fas fa-trash me-1"></i>Excluir</button>
+                </form>
+            @endif
+        </div>
+    </div>
+    <div class="small text-muted" style="font-family: 'Crimson Text', serif;">
+        Total de livros: {{ $editora->livros->count() }}
     </div>
 </div>
 
 @if(session('success'))
-    <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">{{ session('success') }}</div>
+    <div class="alert alert-success parchment-panel py-2 mb-4">{{ session('success') }}</div>
 @endif
 @if(session('error'))
-    <div class="bg-red-100 text-red-800 px-4 py-2 rounded mb-4">{{ session('error') }}</div>
+    <div class="alert alert-danger parchment-panel py-2 mb-4">{{ session('error') }}</div>
 @endif
 
-<div class="bg-white p-6 rounded shadow">
-    <h2 class="font-semibold mb-2">Livros desta Editora ({{ $editora->livros->count() }})</h2>
+<div class="parchment-panel soft-shadow">
+    <h2 class="h5 brand-font mb-3" style="color: var(--old-ink);"><i class="fas fa-book me-2" style="color: var(--old-accent);"></i>Livros</h2>
     @if($editora->livros->isEmpty())
-        <p class="text-gray-500">Nenhum livro associado.</p>
+        <p class="text-muted small mb-0">Nenhum livro associado.</p>
     @else
-        <ul class="list-disc pl-5 space-y-1">
+        <div class="row g-4">
             @foreach($editora->livros as $livro)
-                <li>
-                    <a href="{{ route('livros.show',$livro) }}" class="text-blue-600 hover:underline">{{ $livro->titulo }}</a>
-                </li>
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card h-100 border-0">
+                        <div class="position-relative">
+                            <a href="{{ route('livros.show', $livro->id) }}" class="text-decoration-none">
+                                @if($livro->imagem_capa)
+                                    <img src="{{ asset('storage/' . $livro->imagem_capa) }}" class="card-img-top" style="height: 200px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                                @else
+                                    <div class="d-flex align-items-center justify-content-center" style="height:200px; background:#efe2c9; color: var(--old-ink-muted); font-size:2.2rem;">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                @endif
+                            </a>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="mb-1" style="font-family: 'Cinzel', serif; font-size:.9rem;">
+                                <a href="{{ route('livros.show', $livro->id) }}" class="text-decoration-none" style="color: var(--old-ink);">
+                                    {{ Str::limit($livro->titulo, 50) }}
+                                </a>
+                            </h6>
+                            <div class="small text-muted mb-2">{{ $livro->codigo_livro }}</div>
+                            <div class="mt-auto">
+                                <a href="{{ route('livros.show', $livro->id) }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye me-1"></i>Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endforeach
-        </ul>
+        </div>
     @endif
 </div>
 @endsection

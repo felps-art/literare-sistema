@@ -9,8 +9,17 @@ class StatusLeituraSeeder extends Seeder
 {
     public function run()
     {
-        StatusLeitura::create(['nome' => 'Quero Ler', 'descricao' => 'Livros que deseja ler']);
-        StatusLeitura::create(['nome' => 'Lendo', 'descricao' => 'Livros em leitura']);
-        StatusLeitura::create(['nome' => 'Lido', 'descricao' => 'Livros finalizados']);
+        $dados = [
+            ['nome' => 'Quero Ler', 'descricao' => 'Livros que deseja ler'],
+            ['nome' => 'Lendo', 'descricao' => 'Livros em leitura'],
+            ['nome' => 'Lido', 'descricao' => 'Livros finalizados'],
+        ];
+
+        foreach ($dados as $item) {
+            StatusLeitura::updateOrCreate(
+                ['nome' => $item['nome']],
+                ['descricao' => $item['descricao']]
+            );
+        }
     }
 }

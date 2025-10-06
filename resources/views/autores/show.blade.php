@@ -1,43 +1,65 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-white p-6 rounded-lg shadow">
-    <div class="flex justify-between items-start mb-4">
+<div class="parchment-panel soft-shadow mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
         <div>
-            <h1 class="text-3xl font-bold mb-2">{{ $autor->nome }}</h1>
-            <p class="text-sm text-gray-500">Código: {{ $autor->codigo }}</p>
+            <h1 class="brand-font mb-2" style="color: var(--old-ink);">{{ $autor->nome }}</h1>
+            <div class="text-muted small"><i class="fas fa-tag me-1"></i>Código: {{ $autor->codigo }}</div>
         </div>
-        <div class="flex space-x-2">
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ route('autores.index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
             @if(auth()->check() && auth()->user()->is_admin)
-                <a href="{{ route('autores.edit', $autor->id) }}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Editar</a>
+                <a href="{{ route('autores.edit', $autor->id) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit me-1"></i>Editar</a>
                 <form action="{{ route('autores.destroy', $autor->id) }}" method="POST" onsubmit="return confirm('Excluir este autor?');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Excluir</button>
+                    <button class="btn btn-outline-danger btn-sm" type="submit"><i class="fas fa-trash me-1"></i>Excluir</button>
                 </form>
             @endif
-            <a href="{{ route('autores.index') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Voltar</a>
         </div>
     </div>
-
-    <div class="mt-6">
-        <h2 class="text-xl font-semibold mb-2">Biografia</h2>
-        <p class="text-gray-700 leading-relaxed">{{ $autor->biografia ?? 'Sem biografia cadastrada.' }}</p>
+    <div>
+        <h2 class="h5 brand-font" style="color: var(--old-ink);">Biografia</h2>
+        <p class="mb-0" style="font-family: 'Crimson Text', serif;">{{ $autor->biografia ?? 'Sem biografia cadastrada.' }}</p>
     </div>
+</div>
 
-    <div class="mt-8">
-        <h2 class="text-xl font-semibold mb-2">Livros</h2>
-        @if($autor->livros->count())
-            <ul class="list-disc ml-5 space-y-1">
-                @foreach($autor->livros as $livro)
-                    <li>
-                        <a href="{{ route('livros.show', $livro->id) }}" class="text-blue-600 hover:underline">{{ $livro->titulo }}</a>
-                    </li>
-                @endforeach
-            </ul>
-        @else
-            <p class="text-gray-500 text-sm">Nenhum livro associado.</p>
-        @endif
-    </div>
+<div class="parchment-panel soft-shadow">
+    <h2 class="h5 brand-font mb-3" style="color: var(--old-ink);"><i class="fas fa-book me-2" style="color: var(--old-accent);"></i>Livros</h2>
+    @if($autor->livros->count())
+        <div class="row g-4">
+            @foreach($autor->livros as $livro)
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card h-100 border-0">
+                        <div class="position-relative">
+                            <a href="{{ route('livros.show', $livro->id) }}" class="text-decoration-none">
+                                @if($livro->imagem_capa)
+                                    <img src="{{ asset('storage/' . $livro->imagem_capa) }}" class="card-img-top" style="height: 200px; object-fit: cover; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                                @else
+                                    <div class="d-flex align-items-center justify-content-center" style="height:200px; background:#efe2c9; color: var(--old-ink-muted); font-size:2.2rem;">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                @endif
+                            </a>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="mb-1" style="font-family: 'Cinzel', serif; font-size:.9rem;">
+                                <a href="{{ route('livros.show', $livro->id) }}" class="text-decoration-none" style="color: var(--old-ink);">
+                                    {{ Str::limit($livro->titulo, 50) }}
+                                </a>
+                            </h6>
+                            <div class="small text-muted mb-2">{{ $livro->codigo_livro }}</div>
+                            <div class="mt-auto">
+                                <a href="{{ route('livros.show', $livro->id) }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye me-1"></i>Detalhes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <p class="text-muted small mb-0">Nenhum livro associado.</p>
+    @endif
 </div>
 @endsection

@@ -13,6 +13,13 @@ class Resenha extends Model
 
     protected $fillable = ['user_id', 'livro_id', 'conteudo', 'avaliacao', 'spoiler'];
 
+    protected static function booted()
+    {
+        static::created(function(Resenha $resenha){
+            try { Activity::log($resenha->user_id, 'resenha_created', $resenha, ['livro_id' => $resenha->livro_id]); } catch (\Throwable $e) { /* silent */ }
+        });
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

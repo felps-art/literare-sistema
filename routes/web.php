@@ -11,6 +11,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ResenhaCommentController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\EstanteController;
+use App\Http\Controllers\FeedController;
 use Illuminate\Support\Facades\Route;
 
 // Página inicial e dashboard principal
@@ -59,10 +61,14 @@ Route::get('users/{user}/followers',[App\Http\Controllers\FollowController::clas
 Route::get('users/{user}/following',[App\Http\Controllers\FollowController::class,'following'])->name('users.following');
 
 // Outros recursos
+Route::get('/feed', [FeedController::class,'index'])->middleware(['auth'])->name('feed.index');
 Route::resource('livros', LivroController::class);
 Route::resource('autores', AutorController::class);
 Route::resource('editoras', EditoraController::class);
 Route::resource('posts', PostController::class)->middleware(['auth']);
+// Estante (status de leitura e avaliação)
+Route::post('livros/{livro}/estante', [EstanteController::class, 'store'])->middleware(['auth'])->name('livros.estante.store');
+Route::delete('livros/{livro}/estante', [EstanteController::class, 'destroy'])->middleware(['auth'])->name('livros.estante.destroy');
 // Comentários em posts
 Route::post('posts/{post}/comments', [CommentController::class, 'store'])->middleware(['auth'])->name('posts.comments.store');
 Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->middleware(['auth'])->name('comments.destroy');

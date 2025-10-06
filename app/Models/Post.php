@@ -15,6 +15,13 @@ class Post extends Model
     // Atributos que podem ser preenchidos em massa
     protected $fillable = ['content', 'user_id'];
 
+    protected static function booted()
+    {
+        static::created(function(Post $post){
+            try { Activity::log($post->user_id, 'post_created', $post); } catch (\Throwable $e) { /* silent */ }
+        });
+    }
+
     /**
      * Relacionamento: o usuário dono do post.
      * Um post pertence a um usuário, definido pela chave estrangeira `user_id`.
