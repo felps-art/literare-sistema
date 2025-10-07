@@ -18,11 +18,12 @@ class EditoraSeeder extends Seeder
             ['nome' => 'Editora Record'],
             ['nome' => 'Editora Globo Livros'],
             ['nome' => 'Editora Intrínseca'],
-            ['nome' => 'Editora Suma de Letras']
+            ['nome' => 'Editora Suma de Letras'],
         ];
 
         foreach ($editoras as $editora) {
-            Editora::create($editora);
+            // Evita duplicações caso o seeder rode múltiplas vezes
+            Editora::updateOrCreate(['nome' => $editora['nome']], []);
         }
     }
 }

@@ -43,7 +43,8 @@ class UserFactory extends Factory
             'instagram' => $instagram,
             'email_verified_at' => now(),
             'image_profile' => 'default-user.png',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            // Usa Hash::make para garantir compatibilidade com config atual
+            'password' => static::$password ??= \Illuminate\Support\Facades\Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
     }

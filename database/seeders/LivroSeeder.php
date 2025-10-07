@@ -119,15 +119,24 @@ class LivroSeeder extends Seeder
         foreach ($livros as $livroData) {
             $autoresNomes = $livroData['autores'];
             unset($livroData['autores']);
-            
-            $livro = Livro::create($livroData);
-            
-            // Associa os autores
+
+            // Garante idempotência através do codigo_livro
+            $livro = Livro::updateOrCreate(
+                ['codigo_livro' => $livroData['codigo_livro']],
+                $livroData
+            );
+
+            // Monta lista de IDs de autores existentes
+            $autorIds = [];
             foreach ($autoresNomes as $nomeAutor) {
-                $autor = $autores->where('nome', $nomeAutor)->first();
+                $autor = $autores->firstWhere('nome', $nomeAutor);
                 if ($autor) {
-                    $livro->autores()->attach($autor->id);
+                    $autorIds[] = $autor->id;
                 }
+            }
+            if (!empty($autorIds)) {
+                // syncWithoutDetaching evita duplicações no pivot
+                $livro->autores()->syncWithoutDetaching($autorIds);
             }
         }
     }

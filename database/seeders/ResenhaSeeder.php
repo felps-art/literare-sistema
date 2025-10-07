@@ -28,9 +28,10 @@ class ResenhaSeeder extends Seeder
             $qtd = rand(0,3);
             if ($qtd === 0) continue; // nenhum para este livro
 
-            // Seleciona usuários aleatórios sem repetição
+            // Sempre retorna uma Collection porque passamos um número inteiro
             $usuariosSelecionados = $users->random(min($qtd, $users->count()));
-            foreach (\Illuminate\Support\Arr::wrap($usuariosSelecionados) as $user) {
+
+            foreach ($usuariosSelecionados as $user) {
                 Resenha::factory()->create([
                     'livro_id' => $livro->id,
                     'user_id' => $user->id,

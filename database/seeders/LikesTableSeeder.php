@@ -14,36 +14,34 @@ class LikesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //pego a lista de usuários
         $listaUsuarios = User::all();
-        //pego a lista de posts
         $listaPosts = Post::all();
 
-        //faço um laço de repetição em que para cada usuário
-        //cadastrado, eu "vinculo" uma série aleatória (random) de posts no 
-        //relacionamento de like (curtir), ou seja, um usuário, curtiu um post
-        //se fosse pra eu fazer a curtida para um usuário eu faria da seguinte forma:
-        //$umUsuario->likedPosts()->attach($umPost);
-
-        foreach($listaUsuarios as $umUsuario){
-            //preste atenção em como eu faço o "vínculo" entre o usuário e o post
-                if ($listaPosts->isEmpty()) {
-                    continue;
-                }
-
-                $pick = max(1, (int) floor($listaPosts->count() / 2));
-                $randomPosts = $listaPosts->random($pick)->pluck('id')->all();
-
-                // attach likes without duplicating existing ones
-                $umUsuario->likedPosts()->syncWithoutDetaching($randomPosts);
+        if ($listaUsuarios->isEmpty() || $listaPosts->isEmpty()) {
+            $this->command?->warn('LikesTableSeeder: sem usuários ou posts, ignorando.');
+            return;
         }
 
-        //percorro a lista de posts, verifico a quantidade de likes existem no relacionamento
-        //e salvo na propriedade likes_count da tabela likes
-        foreach($listaPosts as $post){
-            $totalCurtidas = $post->likes()->count();
-            $post->likes_count = $totalCurtidas;
-            $post->save();
+        foreach ($listaUsuarios as $umUsuario) {
+            $postsNaoCurtidos = $listaPosts->filter(function($p) use ($umUsuario){
+                return !$p->isLikedBy($umUsuario); // evita criar like duplicado
+            });
+
+            if ($postsNaoCurtidos->isEmpty()) {
+                continue;
+            }
+
+            // Limitamos picks para no máximo metade ou 10 (o que for menor) para variar sem exagero
+            $maxRandom = min(10, max(1, (int) floor($postsNaoCurtidos->count() / 2)));
+            $pick = rand(1, $maxRandom);
+            $randomPosts = $postsNaoCurtidos->random($pick)->pluck('id')->all();
+            $umUsuario->likedPosts()->syncWithoutDetaching($randomPosts);
+        }
+
+        // Atualiza cache likes_count em cada post
+        foreach ($listaPosts as $post) {
+            $post->likes_count = $post->likes()->count();
+            $post->saveQuietly(); // evita disparar eventos desnecessários
         }
     }
 }

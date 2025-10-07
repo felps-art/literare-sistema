@@ -7,11 +7,12 @@ Criar uma experiência social centrada em leitura, descoberta, interação e con
 
 ---
 ## 1. Núcleo Social (Social Graph)
-- Seguir / deixar de seguir usuários (`follows`)
-- Feed personalizado (resenhas, posts, progresso de leitura, compartilhamentos)
-- Notificações internas (likes, follows, menções, comentários, badges)
-- Menções (@usuario) → gera notificação
-- Hashtags / tags temáticas com página agregadora
+- ✅ Seguir / deixar de seguir usuários (`follows`) — implementado com controller, rotas e testes (idempotência, self-block, unfollow)
+- ✅ Feed personalizado (resenhas, posts, progresso de leitura) — unificado via `activities` (post_created, resenha_created, reading_progress_created/updated) com paginação por cursor e suporte JSON
+	- ⏳ Compartilhamentos ainda não implementados (adiado conforme decisão)
+- ⏳ Notificações internas (likes, follows, menções, comentários, badges)
+- ⏳ Menções (@usuario) → gera notificação
+- ⏳ Hashtags / tags temáticas com página agregadora
 
 ## 2. Conteúdo e Engajamento
 - Reações múltiplas (👍 ❤️ 🤯 😢 📚)
@@ -91,7 +92,10 @@ Criar uma experiência social centrada em leitura, descoberta, interação e con
 ## Ondas (Waves) de Implementação
 
 ### Wave 1 (MVP Social)
-Seguir, feed básico (consulta unificada), notificações iniciais, menções, curtidas, comentários encadeados.
+Status atual:
+- ✅ Seguimento/follow
+- ✅ Feed básico (posts, resenhas, progresso de leitura) — faltam: compartilhamentos, notificações, menções, comentários encadeados
+- Próximos alvos recomendados: menções, notificações mínimas (follow/like), comentários encadeados
 
 ### Wave 2 (Engajamento & Descoberta)
 Hashtags, salvar item, reações múltiplas, trending simples, recomendações heurísticas iniciais.
@@ -162,11 +166,15 @@ UNIQUE(user_id, livro_id)
 - Sanitização de HTML/Markdown (evitar XSS)
 
 ## Próximos Passos Imediatos (Sugestão)
-1. Criar migrations: follows, reactions, mentions, saved_items
-2. Criar modelos + relações Eloquent
-3. Endpoints REST básicos + testes Pest (seguir, curtir, reagir, mencionar)
-4. Implementar serviço de feed simples (query unificada)
-5. Adicionar notificações database para likes/follows/menções
+1. Implementar compartilhamentos (`shares`) integrados ao feed (activity: share_created)
+2. Adicionar notificações iniciais (follow_created, like_post, like_resenha)
+3. Menções (@usuario) com parser simples e activity + notificação
+4. Comentários encadeados (parent_id) e inclusão no feed se pertinente
+5. Cache de contadores (followers_count, likes_count) + índices complementares (user_id, created_at) para otimizar feed
+
+## Registro de Progresso
+- [DATA] Feed básico entregue (posts, resenhas, progresso) sem compartilhamentos
+- [DATA] Sistema de follow concluído com testes automatizados
 
 ---
 Se desejar, prossiga abrindo issues no GitHub dividindo cada bloco. Este documento pode ser expandido com prioridades numéricas e estimativas.

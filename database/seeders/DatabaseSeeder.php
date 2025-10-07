@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
             UserTableSeeder::class, // garante usuários principais
             PostSeeder::class,
             ResenhaSeeder::class,
+            PhotosTableSeeder::class,
+            LikesTableSeeder::class,
+            FollowSeeder::class,
         ]);
     }
 }
