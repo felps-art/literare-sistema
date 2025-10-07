@@ -64,3 +64,25 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Sobre o Literare
+
+O Literare é uma rede social brasileira para leitores e entusiastas da literatura. A plataforma foi construída com Laravel e oferece recursos focados em descoberta, compartilhamento e discussão de livros. Principais funcionalidades:
+
+- Cadastro e catálogo de livros, autores e editoras
+- Marcação de status de leitura (lido, lendo, quero ler) com progresso de leitura
+- Publicação de resenhas detalhadas e rápidas (micro-resenhas)
+- Sistema de comentários e respostas em posts e resenhas
+- Curtidas, reações e contagem de interações em conteúdo
+- Perfis de usuário com foto, estatísticas de leitura e prateleiras personalizadas
+- Sistema de seguidores, feeds personalizados e recomendações sociais
+- Upload de capas/fotos e integração simples com APIs de metadados de livros
+
+Objetivo: fomentar uma comunidade engajada de leitores, facilitar a descoberta de novas leituras e tornar a experiência de compartilhar opiniões literárias simples e agradável.
+
+Como contribuir: leia as convenções de contribuição no repositório, rode os testes via PHPUnit/Pest e abra pull requests com mudanças pequenas e documentadas.
+
+## Roadmap
+
+O planejamento completo de evolução social e técnica do projeto está em [`docs/ROADMAP.md`](docs/ROADMAP.md).
