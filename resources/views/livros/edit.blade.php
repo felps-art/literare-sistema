@@ -9,7 +9,11 @@
         </div>
         <div class="d-flex gap-2 mt-2 mt-sm-0">
             <a href="{{ route('livros.show', $livro->id) }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-eye me-1"></i>Ver</a>
-            <a href="{{ route('livros.index') }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
+            @if(auth()->check() && auth()->user()->is_admin)
+                <a href="{{ route('livros.index') }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
+            @else
+                <a href="{{ route('dashboard') }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
+            @endif
         </div>
     </div>
 

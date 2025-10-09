@@ -1,69 +1,70 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Posts</h1>
-    <a href="{{ route('posts.create') }}" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Novo Post</a>
-</div>
-
-@if(session('success'))
-    <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">{{ session('success') }}</div>
-@endif
-
-@forelse($posts as $post)
-    <div class="bg-white p-4 rounded shadow mb-4">
-        <div class="flex justify-between text-sm text-gray-600 mb-2">
-            <span>por <a href="{{ route('profile.show',$post->user_id) }}" class="text-blue-600 hover:underline">{{ $post->user->name }}</a></span>
-            <span>{{ $post->created_at->diffForHumans() }}</span>
-        </div>
-        <p class="mb-2 whitespace-pre-line">{{ Str::limit($post->content, 300) }}</p>
-        @if($post->photos->count())
-            <div class="grid grid-cols-4 gap-2 mb-2">
-                @foreach($post->photos->take(4) as $photo)
-                    <img src="{{ asset('storage/'.$photo->image_path) }}" class="w-full h-32 object-cover rounded" />
-                @endforeach
-            </div>
-        @endif
-        <div class="flex items-center justify-between mt-2">
-            <a href="{{ route('posts.show',$post) }}" class="text-blue-600 text-sm hover:underline">
-                <i class="fas fa-eye mr-1"></i>Ver mais
-            </a>
-            <div class="flex items-center gap-3">
-                <span class="text-sm text-gray-600">
-                    <i class="fas fa-comment mr-1"></i>{{ $post->comments->count() }}
-                </span>
-                @auth
-                    @php($liked = $post->likes->where('user_id',auth()->id())->count() > 0)
-                    @if($liked)
-                        <form action="{{ route('posts.unlike',$post) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="flex items-center gap-1 text-red-500 hover:text-red-600 transition-colors">
-                                <i class="fas fa-heart"></i>
-                                <span class="text-sm">{{ $post->likes_count ?? $post->likes->count() }}</span>
-                            </button>
-                        </form>
-                    @else
-                        <form action="{{ route('posts.like',$post) }}" method="POST" class="inline">
-                            @csrf
-                            <button class="flex items-center gap-1 text-gray-500 hover:text-red-500 transition-colors">
-                                <i class="far fa-heart"></i>
-                                <span class="text-sm">{{ $post->likes_count ?? $post->likes->count() }}</span>
-                            </button>
-                        </form>
-                    @endif
-                @else
-                    <span class="flex items-center gap-1 text-gray-500">
-                        <i class="far fa-heart"></i>
-                        <span class="text-sm">{{ $post->likes_count ?? $post->likes->count() }}</span>
-                    </span>
-                @endauth
-            </div>
-        </div>
+    <div class="parchment-panel soft-shadow mb-3 d-flex justify-content-between align-items-center">
+        <h1 class="h5 brand-font m-0" style="color:var(--old-ink);">
+            <i class="fas fa-comments me-2" style="color:var(--old-accent);"></i>Posts
+        </h1>
+        <a href="{{ route('posts.create') }}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-plus me-1"></i>Novo Post
+        </a>
     </div>
-@empty
-    <p class="text-gray-500">Nenhum post encontrado.</p>
-@endforelse
 
-<div class="mt-4">{{ $posts->links() }}</div>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @forelse($posts as $post)
+        <div class="parchment-panel soft-shadow mb-3">
+            <div class="d-flex justify-content-between small text-muted mb-2">
+                <span>por <a href="{{ route('profile.show',$post->user_id) }}" class="text-decoration-none">{{ $post->user->name }}</a></span>
+                <span>{{ $post->created_at->diffForHumans() }}</span>
+            </div>
+            <div class="mb-2" style="white-space:pre-line; color:var(--old-ink);">{{ Str::limit($post->content, 300) }}</div>
+            @if($post->photos->count())
+                <div class="row g-2 mb-2">
+                    @foreach($post->photos->take(4) as $photo)
+                        <div class="col-6 col-md-3">
+                            <img src="{{ $photo->url }}" class="img-fluid rounded" style="height:130px; object-fit:cover; width:100%;"/>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+            <div class="d-flex justify-content-between align-items-center mt-2">
+                <a href="{{ route('posts.show',$post) }}" class="small text-decoration-none">
+                    <i class="fas fa-eye me-1"></i>Ver mais
+                </a>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="small text-muted">
+                        <i class="fas fa-comment me-1"></i>{{ $post->comments->count() }}
+                    </span>
+                    @auth
+                        <button
+                            class="btn btn-sm {{ $post->isLikedBy(auth()->user()) ? 'btn-outline-danger' : 'btn-outline-secondary' }}"
+                            data-like
+                            data-type="post"
+                            data-id="{{ $post->id }}"
+                            data-state="{{ $post->isLikedBy(auth()->user()) ? 'liked' : 'unliked' }}"
+                        >
+                            <i class="{{ $post->isLikedBy(auth()->user()) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
+                            <span class="ms-1" data-like-count>{{ $post->likesCount() }}</span>
+                        </button>
+                    @endauth
+                    @guest
+                        <span class="small text-muted">
+                            <i class="far fa-heart"></i>
+                            <span class="ms-1">{{ $post->likesCount() }}</span>
+                        </span>
+                    @endguest
+                </div>
+            </div>
+        </div>
+    @empty
+        <div class="parchment-panel soft-shadow text-center text-muted">Nenhum post encontrado.</div>
+    @endforelse
+
+    <div class="mt-3">{{ $posts->links() }}</div>
 @endsection

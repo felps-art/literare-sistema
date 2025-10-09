@@ -8,14 +8,16 @@
             <div class="text-muted small"><i class="fas fa-tag me-1"></i>Código: {{ $autor->codigo }}</div>
         </div>
         <div class="d-flex flex-wrap gap-2">
-            <a href="{{ route('autores.index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
             @if(auth()->check() && auth()->user()->is_admin)
+                <a href="{{ route('autores.index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
                 <a href="{{ route('autores.edit', $autor->id) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit me-1"></i>Editar</a>
                 <form action="{{ route('autores.destroy', $autor->id) }}" method="POST" onsubmit="return confirm('Excluir este autor?');">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-outline-danger btn-sm" type="submit"><i class="fas fa-trash me-1"></i>Excluir</button>
                 </form>
+            @else
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
             @endif
         </div>
     </div>

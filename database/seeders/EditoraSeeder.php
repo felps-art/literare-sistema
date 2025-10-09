@@ -19,6 +19,17 @@ class EditoraSeeder extends Seeder
             ['nome' => 'Editora Globo Livros'],
             ['nome' => 'Editora Intrínseca'],
             ['nome' => 'Editora Suma de Letras'],
+            ['nome' => 'Editora Seguinte'],
+            ['nome' => 'Editora Alt'],
+            ['nome' => 'Editora Arqueiro'],
+            ['nome' => 'Editora Rocco'],
+            ['nome' => 'Editora Darkside'],
+            ['nome' => 'Editora Morro Branco'], 
+            ['nome' => 'Editora Paralela'],
+            ['nome' => 'Editora Novo Século'],
+            ['nome' => 'Editora Faro Editorial'],
+            ['nome' => 'Editora Editora Jangada'],
+            ['nome' => 'Editora Pandorga'],
         ];
 
         foreach ($editoras as $editora) {

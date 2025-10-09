@@ -217,17 +217,21 @@
                         <a href="{{ route('posts.create') }}" class="btn btn-outline-primary">
                             <i class="fas fa-edit me-2"></i>Novo Post
                         </a>
-                        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-users me-2"></i>Descobrir Leitores
-                        </a>
-                            @if(auth()->check() && auth()->user()->is_admin)
-                                <a href="{{ route('autores.index') }}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-user-edit me-2"></i>Autores
-                                </a>
-                                <a href="{{ route('editoras.index') }}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-building me-2"></i>Editoras
-                                </a>
-                            @endif
+                        @if(auth()->check() && auth()->user()->is_admin)
+                            <!-- Admin-only quick links grouped together -->
+                            <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-users me-2"></i>Usuários
+                            </a>
+                            <a href="{{ route('livros.index') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-book me-2"></i>Livros
+                            </a>
+                            <a href="{{ route('autores.index') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-user-edit me-2"></i>Autores
+                            </a>
+                            <a href="{{ route('editoras.index') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-building me-2"></i>Editoras
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -12,7 +12,7 @@
         @if(isset($post) && $post->photos->count())
             <div class="mt-3 grid grid-cols-3 gap-2">
                 @foreach($post->photos as $photo)
-                    <img src="{{ asset('storage/'.$photo->image_path) }}" class="h-24 w-full object-cover rounded" />
+                    <img src="{{ $photo->url }}" class="h-24 w-full object-cover rounded" />
                 @endforeach
             </div>
         @endif

@@ -38,16 +38,53 @@
                         </div>
                         <div class="activity-body small">
                             @if($type === 'post_created' && $subject)
-                                <a href="#" class="text-decoration-none" style="color:var(--old-ink);">{{ Str::limit($subject->content, 160) }}</a>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="{{ route('posts.show', $subject->id) }}" class="text-decoration-none" style="color:var(--old-ink);">{{ Str::limit($subject->content, 160) }}</a>
+                                    <div class="ms-2">
+                                        @auth
+                                            <button
+                                                class="btn btn-sm {{ $subject->isLikedBy(auth()->user()) ? 'btn-outline-danger' : 'btn-outline-secondary' }}"
+                                                data-like
+                                                data-type="post"
+                                                data-id="{{ $subject->id }}"
+                                                data-state="{{ $subject->isLikedBy(auth()->user()) ? 'liked' : 'unliked' }}"
+                                            >
+                                                <i class="{{ $subject->isLikedBy(auth()->user()) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
+                                                <span class="ms-1 small" data-like-count>{{ $subject->likesCount() }}</span>
+                                            </button>
+                                        @endauth
+                                    </div>
+                                </div>
                             @elseif($type === 'resenha_created' && $subject)
                                 <div>
                                     <span class="badge bg-warning text-dark me-1"><i class="fas fa-star"></i> {{ $subject->avaliacao ?? '-' }}/5</span>
                                     sobre o livro <strong>{{ $subject->livro->titulo ?? 'Livro' }}</strong>
                                 </div>
-                                <div class="text-muted mt-1" style="font-family:'Crimson Text', serif;">{!! nl2br(e(Str::limit($subject->conteudo, 220))) !!}</div>
+                                <div class="d-flex justify-content-between align-items-start mt-1">
+                                    <div class="text-muted" style="font-family:'Crimson Text', serif;">{!! nl2br(e(Str::limit($subject->conteudo, 220))) !!}</div>
+                                    <div class="ms-2">
+                                        @auth
+                                            <button
+                                                class="btn btn-sm {{ $subject->isLikedBy(auth()->user()) ? 'btn-outline-danger' : 'btn-outline-secondary' }}"
+                                                data-like
+                                                data-type="resenha"
+                                                data-id="{{ $subject->id }}"
+                                                data-state="{{ $subject->isLikedBy(auth()->user()) ? 'liked' : 'unliked' }}"
+                                            >
+                                                <i class="{{ $subject->isLikedBy(auth()->user()) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
+                                                <span class="ms-1 small" data-like-count>{{ $subject->likesCount() }}</span>
+                                            </button>
+                                        @endauth
+                                    </div>
+                                </div>
                             @elseif($type === 'status_update')
                                 @php $meta = $activity->meta ?? []; @endphp
-                                <div>Status: <strong>{{ $meta['status'] ?? '' }}</strong> @if(isset($meta['nota'])) • Nota: {{ $meta['nota'] }} @endif</div>
+                                <div>
+                                    Status: <strong>{{ $meta['status'] ?? '' }}</strong>
+                                    @if(isset($meta['nota']))
+                                        <span> • Nota: {{ $meta['nota'] }}</span>
+                                    @endif
+                                </div>
                             @endif
                         </div>
                     </div>

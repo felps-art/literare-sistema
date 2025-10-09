@@ -43,16 +43,20 @@
                 <p class="mb-0" style="font-family: 'Crimson Text', serif;">{{ $livro->sinopse ?? 'Sem sinopse informada.' }}</p>
             </div>
             <div class="mt-4 d-flex flex-wrap gap-2">
-                <a href="{{ route('livros.index') }}" class="btn btn-outline-secondary btn-sm">
-                    <i class="fas fa-arrow-left me-1"></i>Voltar
-                </a>
                 @if(auth()->check() && auth()->user()->is_admin)
+                    <a href="{{ route('livros.index') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-arrow-left me-1"></i>Voltar
+                    </a>
                     <a href="{{ route('livros.edit', $livro->id) }}" class="btn btn-outline-secondary btn-sm">
                         <i class="fas fa-edit me-1"></i>Editar
                     </a>
                                         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDeleteLivro">
                                                 <i class="fas fa-trash me-1"></i>Excluir
                                         </button>
+                @else
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-arrow-left me-1"></i>Voltar
+                    </a>
                 @endif
             </div>
         </div>

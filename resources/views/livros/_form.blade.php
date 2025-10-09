@@ -64,7 +64,11 @@
     </div>
 </div>
 <div class="mt-4 d-flex justify-content-end gap-2">
-    <a href="{{ route('livros.index') }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Cancelar</a>
+    @if(auth()->check() && auth()->user()->is_admin)
+        <a href="{{ route('livros.index') }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Cancelar</a>
+    @else
+        <a href="{{ route('dashboard') }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Cancelar</a>
+    @endif
     <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save me-1"></i>Salvar</button>
 </div>
 

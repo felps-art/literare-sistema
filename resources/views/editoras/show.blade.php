@@ -5,14 +5,16 @@
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-2">
         <h1 class="brand-font mb-0" style="color: var(--old-ink);">Editora: {{ $editora->nome }}</h1>
         <div class="d-flex flex-wrap gap-2">
-            <a href="{{ route('editoras.index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
             @if(auth()->check() && auth()->user()->is_admin)
+                <a href="{{ route('editoras.index') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
                 <a href="{{ route('editoras.edit',$editora) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit me-1"></i>Editar</a>
                 <form action="{{ route('editoras.destroy',$editora) }}" method="POST" onsubmit="return confirm('Excluir esta editora?');" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-outline-danger btn-sm" type="submit"><i class="fas fa-trash me-1"></i>Excluir</button>
                 </form>
+            @else
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i>Voltar</a>
             @endif
         </div>
     </div>

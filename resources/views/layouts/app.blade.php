@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Literare</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -167,16 +168,7 @@
                                 <i class="fas fa-star me-1"></i>Resenhas
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('livros.index') }}">
-                                <i class="fas fa-book me-1"></i>Livros
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('users.index') }}">
-                                <i class="fas fa-users me-1"></i>Usuários
-                            </a>
-                        </li>
+                        <!-- Links de Livros e Usuários removidos da navbar superior -->
                     @endauth
                 </ul>
                 

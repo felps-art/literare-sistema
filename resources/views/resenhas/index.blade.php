@@ -1,114 +1,86 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-6xl mx-auto">
-    <!-- Cabeçalho -->
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Todas as Resenhas</h1>
-        
+    <div class="parchment-panel soft-shadow mb-3 d-flex justify-content-between align-items-center">
+        <h1 class="h5 brand-font m-0" style="color:var(--old-ink);">
+            <i class="fas fa-star me-2" style="color:var(--old-accent);"></i>Todas as Resenhas
+        </h1>
         @auth
-            <a href="{{ route('resenhas.create') }}" 
-               class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                ✏️ Escrever Resenha
-            </a>
+        <a href="{{ route('resenhas.create') }}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-pen me-1"></i>Escrever Resenha
+        </a>
         @endauth
     </div>
 
-    <!-- Filtros -->
-    <div class="bg-white rounded-lg shadow mb-6 p-4">
-        <div class="flex space-x-4">
-            <select class="border border-gray-300 rounded-lg px-3 py-2">
-                <option>Ordenar por: Mais recentes</option>
-                <option>Mais antigas</option>
-                <option>Melhores avaliações</option>
-            </select>
-            
-            <input type="text" placeholder="Buscar resenhas..." 
-                   class="border border-gray-300 rounded-lg px-3 py-2 flex-1">
-            
-            <button class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300">
-                🔍 Buscar
-            </button>
+    <div class="parchment-panel soft-shadow mb-3">
+        <div class="row g-2 align-items-center">
+            <div class="col-sm-4">
+                <select class="form-select form-select-sm">
+                    <option>Ordenar por: Mais recentes</option>
+                    <option>Mais antigas</option>
+                    <option>Melhores avaliações</option>
+                </select>
+            </div>
+            <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" placeholder="Buscar resenhas..." />
+            </div>
+            <div class="col-sm-2 text-end">
+                <button class="btn btn-sm btn-outline-secondary w-100"><i class="fas fa-search me-1"></i>Buscar</button>
+            </div>
         </div>
     </div>
 
-    <!-- Lista de resenhas -->
-    <div class="space-y-6">
-        @foreach($resenhas as $resenha)
-            <div class="bg-white rounded-lg shadow hover:shadow-md transition-shadow">
-                <div class="p-6">
-                    <!-- Cabeçalho da resenha -->
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex-1">
-                            <a href="{{ route('resenhas.show', $resenha->id) }}" 
-                               class="text-xl font-bold text-gray-900 hover:text-blue-600">
-                                {{ $resenha->livro->titulo }}
-                            </a>
-                            
-                            <div class="flex items-center mt-2 space-x-4 text-sm text-gray-500">
-                                <a href="{{ route('profile.show', $resenha->user->id) }}" 
-                                   class="flex items-center space-x-2 hover:text-blue-600">
-                                    @if($resenha->user->foto_perfil)
-                                        <img class="h-6 w-6 rounded-full" 
-                                             src="{{ asset('storage/' . $resenha->user->foto_perfil) }}" 
-                                             alt="{{ $resenha->user->name }}">
-                                    @else
-                                        <div class="h-6 w-6 bg-gray-300 rounded-full flex items-center justify-center text-xs">
-                                            {{ substr($resenha->user->name, 0, 1) }}
-                                        </div>
-                                    @endif
-                                    <span>{{ $resenha->user->name }}</span>
-                                </a>
-                                <span>•</span>
-                                <span>{{ $resenha->created_at->format('d/m/Y') }}</span>
-                                
-                                @if($resenha->spoiler)
-                                    <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">
-                                        ⚠️ Spoiler
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                        
-                        @if($resenha->avaliacao)
-                            <div class="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
-                                <span class="text-yellow-600 font-bold mr-1">{{ $resenha->avaliacao }}</span>
-                                <span class="text-yellow-400">★</span>
-                            </div>
+    @foreach($resenhas as $resenha)
+        <div class="parchment-panel soft-shadow mb-3">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <a href="{{ route('resenhas.show', $resenha->id) }}" class="text-decoration-none fw-semibold" style="color:var(--old-ink);">
+                        {{ $resenha->livro->titulo }}
+                    </a>
+                    <div class="small text-muted mt-1 d-flex align-items-center gap-2">
+                        <a href="{{ route('profile.show', $resenha->user->id) }}" class="text-muted text-decoration-none d-flex align-items-center gap-2">
+                            @if($resenha->user->foto_perfil)
+                                <img class="rounded-circle" width="18" height="18" style="object-fit:cover;" src="{{ asset('storage/' . $resenha->user->foto_perfil) }}" alt="{{ $resenha->user->name }}">
+                            @else
+                                <span class="badge bg-secondary rounded-circle" style="width:18px;height:18px; display:inline-flex;align-items:center;justify-content:center;">{{ substr($resenha->user->name, 0, 1) }}</span>
+                            @endif
+                            <span>{{ $resenha->user->name }}</span>
+                        </a>
+                        <span>·</span>
+                        <span>{{ $resenha->created_at->format('d/m/Y') }}</span>
+                        @if($resenha->spoiler)
+                            <span class="badge bg-danger">Spoiler</span>
                         @endif
                     </div>
-
-                    <!-- Preview do conteúdo -->
-                    <div class="prose max-w-none text-gray-700 mb-4">
-                        {{ Str::limit(strip_tags($resenha->conteudo), 300) }}
-                    </div>
-
-                    <!-- Rodapé -->
-                    <div class="flex justify-between items-center">
-                        <a href="{{ route('resenhas.show', $resenha->id) }}" 
-                           class="text-blue-600 hover:underline font-medium">
-                            Ler resenha completa →
-                        </a>
-                        
-                        <div class="flex space-x-4 text-sm text-gray-500">
-                            <span class="flex items-center gap-1">
-                                <i class="fas fa-comment"></i>
-                                {{ $resenha->comments->count() }} comentário{{ $resenha->comments->count() === 1 ? '' : 's' }}
-                            </span>
-                            <span class="flex items-center gap-1">
-                                <i class="fas fa-heart text-red-400"></i>
-                                {{ $resenha->likesCount() }} curtida{{ $resenha->likesCount() === 1 ? '' : 's' }}
-                            </span>
-                        </div>
-                    </div>
+                </div>
+                @if($resenha->avaliacao)
+                    <span class="badge bg-warning text-dark"><i class="fas fa-star me-1"></i>{{ $resenha->avaliacao }}/5</span>
+                @endif
+            </div>
+            <div class="text-muted" style="font-family:'Crimson Text', serif;">{{ Str::limit(strip_tags($resenha->conteudo), 300) }}</div>
+            <div class="d-flex justify-content-between align-items-center mt-2">
+                <a href="{{ route('resenhas.show', $resenha->id) }}" class="small text-decoration-none"><i class="fas fa-eye me-1"></i>Ler resenha completa</a>
+                <div class="d-flex align-items-center gap-3 small text-muted">
+                    <span><i class="fas fa-comment me-1"></i>{{ $resenha->comments->count() }}</span>
+                    @auth
+                        <button
+                            class="btn btn-sm {{ $resenha->isLikedBy(auth()->user()) ? 'btn-outline-danger' : 'btn-outline-secondary' }}"
+                            data-like
+                            data-type="resenha"
+                            data-id="{{ $resenha->id }}"
+                            data-state="{{ $resenha->isLikedBy(auth()->user()) ? 'liked' : 'unliked' }}"
+                        >
+                            <i class="{{ $resenha->isLikedBy(auth()->user()) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
+                            <span class="ms-1" data-like-count>{{ $resenha->likesCount() }}</span>
+                        </button>
+                    @endauth
+                    @guest
+                        <span><i class="far fa-heart"></i><span class="ms-1">{{ $resenha->likesCount() }}</span></span>
+                    @endguest
                 </div>
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
 
-    <!-- Paginação -->
-    <div class="mt-6">
-        {{ $resenhas->links() }}
-    </div>
-</div>
+    <div class="mt-3">{{ $resenhas->links() }}</div>
 @endsection

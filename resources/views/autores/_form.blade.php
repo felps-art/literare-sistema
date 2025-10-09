@@ -19,6 +19,14 @@
     </div>
 </div>
 <div class="mt-6 flex justify-end space-x-3">
-    <a href="{{ route('autores.index') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</a>
+    @if(auth()->check() && auth()->user()->is_admin)
+        @if(isset($autor))
+            <a href="{{ route('autores.show', $autor) }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</a>
+        @else
+            <a href="{{ route('autores.index') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</a>
+        @endif
+    @else
+        <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</a>
+    @endif
     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Salvar</button>
 </div>

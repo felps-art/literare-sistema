@@ -17,9 +17,12 @@ class ResenhaLikeController extends Controller
         
         if (!$user->likedResenhas()->where('resenha_id', $resenha->id)->exists()) {
             $user->likedResenhas()->attach($resenha->id);
+            // Atualiza contador em cache se a coluna existir
+            try { $resenha->increment('likes_count'); } catch (\Throwable $e) { /* coluna pode não existir */ }
         }
         if ($request->wantsJson()) {
-            $count = $resenha->likes()->count();
+            $resenha->refresh();
+            $count = $resenha->likesCount();
             return response()->json([
                 'liked' => true,
                 'likes_count' => $count,
@@ -35,9 +38,11 @@ class ResenhaLikeController extends Controller
         
         if ($user->likedResenhas()->where('resenha_id', $resenha->id)->exists()) {
             $user->likedResenhas()->detach($resenha->id);
+            try { $resenha->decrement('likes_count'); } catch (\Throwable $e) { /* coluna pode não existir */ }
         }
         if ($request->wantsJson()) {
-            $count = $resenha->likes()->count();
+            $resenha->refresh();
+            $count = $resenha->likesCount();
             return response()->json([
                 'liked' => false,
                 'likes_count' => $count,
