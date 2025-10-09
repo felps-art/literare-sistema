@@ -142,7 +142,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand brand-font" href="{{ route('dashboard') }}">
+            <a class="navbar-brand brand-font" href="{{ auth()->check() && auth()->user()->is_admin ? route('dashboard') : route('feed.index') }}">
                 <i class="fas fa-book-open me-2"></i>Literare
             </a>
             
@@ -155,7 +155,12 @@
                     @auth
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('feed.index') }}">
-                                <i class="fas fa-rss me-1"></i>Feed
+                                <i class="fas fa-home me-1"></i>Início
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('explorar') }}">
+                                <i class="fas fa-compass me-1"></i>Explorar
                             </a>
                         </li>
                         <li class="nav-item">
@@ -166,6 +171,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('resenhas.index') }}">
                                 <i class="fas fa-star me-1"></i>Resenhas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('estante.index') }}">
+                                <i class="fas fa-books me-1"></i>Estante
                             </a>
                         </li>
                         <!-- Links de Livros e Usuários removidos da navbar superior -->

@@ -16,9 +16,16 @@ use App\Http\Controllers\FeedController;
 use Illuminate\Support\Facades\Route;
 
 // Página inicial e dashboard principal
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard.home');
+Route::get('/', function () {
+    // Redireciona usuários logados não-admins para Início
+    if (auth()->check() && !auth()->user()->is_admin) {
+        return redirect()->route('feed.index');
+    }
+    return app(DashboardController::class)->index(request());
+})->name('dashboard.home');
+
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'admin'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -61,7 +68,10 @@ Route::get('users/{user}/followers',[App\Http\Controllers\FollowController::clas
 Route::get('users/{user}/following',[App\Http\Controllers\FollowController::class,'following'])->name('users.following');
 
 // Outros recursos
+// Início (feed personalizado)
 Route::get('/feed', [FeedController::class,'index'])->middleware(['auth'])->name('feed.index');
+// Explorar (feed geral, sem personalização)
+Route::get('/explorar', [FeedController::class,'explore'])->middleware(['auth'])->name('explorar');
 Route::resource('livros', LivroController::class);
 Route::resource('autores', AutorController::class);
 Route::resource('editoras', EditoraController::class);
@@ -69,6 +79,8 @@ Route::resource('posts', PostController::class)->middleware(['auth']);
 // Estante (status de leitura e avaliação)
 Route::post('livros/{livro}/estante', [EstanteController::class, 'store'])->middleware(['auth'])->name('livros.estante.store');
 Route::delete('livros/{livro}/estante', [EstanteController::class, 'destroy'])->middleware(['auth'])->name('livros.estante.destroy');
+// Estante do usuário
+Route::get('/estante', [EstanteController::class, 'index'])->middleware(['auth'])->name('estante.index');
 // Comentários em posts
 Route::post('posts/{post}/comments', [CommentController::class, 'store'])->middleware(['auth'])->name('posts.comments.store');
 Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->middleware(['auth'])->name('comments.destroy');

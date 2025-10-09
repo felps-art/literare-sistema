@@ -11,6 +11,28 @@ use Illuminate\Support\Facades\Auth;
 class EstanteController extends Controller
 {
     /**
+     * Lista todos os livros presentes na estante do usuário autenticado.
+     */
+    public function index(Request $request)
+    {
+        $user = Auth::user();
+        $itens = \App\Models\UsuarioLivroStatus::query()
+            ->with(['livro:id,titulo,imagem_capa', 'statusLeitura:id,nome'])
+            ->where('user_id', $user->id)
+            ->orderByDesc('updated_at')
+            ->paginate(12);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'data' => $itens,
+            ]);
+        }
+
+        return view('estante.index', [
+            'itens' => $itens,
+        ]);
+    }
+    /**
      * Armazena ou atualiza o status de leitura e avaliação de um livro para o usuário autenticado.
      */
     public function store(Request $request, Livro $livro)

@@ -1,43 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Hero Section -->
-<div class="row mb-5">
-    <div class="col-12">
-        <!-- Hero agora usa o tema parchment em vez de bg-primary azul -->
-        <div class="parchment-panel soft-shadow rounded-3 p-5">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <h1 class="display-4 brand-font mb-3" style="color: var(--old-ink);">
-                        <i class="fas fa-book-open me-3" style="color: var(--old-accent);"></i>Bem-vindo à Literare
-                    </h1>
-                    <p class="lead mb-4" style="color: var(--old-ink-muted);">
-                        Sua comunidade literária online. Descubra novos livros, compartilhe resenhas 
-                        e conecte-se com outros leitores apaixonados.
-                    </p>
-                    @guest
-                        <a href="{{ route('register') }}" class="btn btn-primary btn-lg me-3">
-                            <i class="fas fa-user-plus me-2"></i>Cadastre-se
-                        </a>
-                        <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-sign-in-alt me-2"></i>Entrar
-                        </a>
-                    @else
-                        <a href="{{ route('resenhas.create') }}" class="btn btn-primary btn-lg me-3">
-                            <i class="fas fa-plus me-2"></i>Nova Resenha
-                        </a>
-                        <a href="{{ route('posts.create') }}" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-edit me-2"></i>Novo Post
-                        </a>
-                    @endguest
-                </div>
-                <div class="col-lg-4 text-center">
-                    <i class="fas fa-books display-1" style="opacity: 0.15; color: var(--old-accent);"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Statistics Cards -->
 <div class="row mb-5">

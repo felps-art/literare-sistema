@@ -18,7 +18,11 @@ Criar uma experiência social centrada em leitura, descoberta, interação e con
 - Reações múltiplas (👍 ❤️ 🤯 😢 📚)
 - Comentários encadeados (parent_id)
 - Salvar / favoritar itens (`saved_items`)
-- Compartilhar / republicar conteúdo (`shares`)
+- Compartilhar / republicar conteúdo (repost) e Citar conteúdo (quote) — `shares` com/sem comentário (inspirado no X)
+- Threads de posts (encadeamento de publicações além de comentários)
+- Enquetes (`polls`) em posts e resenhas
+- Contador de visualizações/impressões (`views_count`) por item
+- Citações de livros (`quotes`) com referência ao livro, página/capítulo e contexto
 - Rascunhos de resenhas (`is_draft`)
 - Spoilers com marcação `[spoiler]...[/spoiler]`
 - Sistema de pontos e badges (gamificação)
@@ -28,21 +32,28 @@ Criar uma experiência social centrada em leitura, descoberta, interação e con
 - Busca avançada (Scout / índice por título, autor, tags)
 - Recomendações heurísticas (similaridade de leituras)
 - Sugestões de usuários para seguir
-- Trending (livros, autores, tags) por janela temporal
+- Trending (livros, autores, tags) por janela temporal + Trending de hashtags/assuntos (inspirado no X)
 - Página Explorar (explore) com agregados
+- Seguir temas/tags/interesses (timeline temática)
+- Clubes de leitura (descoberta de grupos por gênero/autor/livro)
+- Listas públicas e editoriais ("Mais lidos da semana", "Clássicos do mês")
 
 ## 4. Perfil e Identidade
 - Bio rica + links externos
 - Banner/capa de perfil
-- Estatísticas públicas (livros lidos no ano, páginas, média)
+- Estatísticas públicas (livros lidos no ano, páginas, média) — estilo Goodreads
+- Objetivo anual de leitura (meta) com barra de progresso e histórico por ano
 - Conta privada (aprovação de seguidores) + `follow_requests`
 - Bloqueio / silenciamento (`user_blocks`)
 - Prateleiras personalizadas (shelves + shelf_items)
+- Páginas de autores e séries (vitrine, biografia, obras, resenhas)
 
 ## 5. Leitura e Progresso
 - Tracking granular de progresso (percentual ou página)
 - Desafios de leitura anuais (reading_challenges)
 - Eventos de progresso no feed (com rate limit)
+- Status adicional: "abandonado" (did-not-finish)
+- Registro de citações e trechos destacados a partir da leitura
 
 ## 6. Moderação e Segurança
 - Denúncia de conteúdo (`reports`)
@@ -57,6 +68,8 @@ Criar uma experiência social centrada em leitura, descoberta, interação e con
 - Notificações em tempo real (curtidas, menções, follow)
 - E-mail digest semanal
 - Push notifications (PWA + subscriptions)
+- Notificações para quote/repost, respostas em threads e enquetes
+- Contadores ao vivo de curtidas/comentários/visualizações na timeline
 
 ## 8. UX / UI
 - Infinite scroll em feed e listas
@@ -65,6 +78,10 @@ Criar uma experiência social centrada em leitura, descoberta, interação e con
 - Editor de resenha com preview markdown
 - Modo escuro (persistência)
 - Acessibilidade (ARIA, contraste, navegação teclado)
+- Visualização de threads (encadeamento de posts)
+- Cartões de citação (quotes) com referência ao livro
+- Cartões de livro/autor com metadados e ações rápidas
+- Modo compacto de timeline (estilo X)
 
 ## 9. Performance & Escalabilidade
 - Cache de contadores (likes, comments)
@@ -82,11 +99,23 @@ Criar uma experiência social centrada em leitura, descoberta, interação e con
 - Seeders ricos para ambiente demo
 
 ## 11. Monetização / Futuro (Opcional)
-- Plano premium (estatísticas avançadas, sem ads)
+- Plano premium
+	- Estatísticas avançadas de leitura e engajamento (por período, por gênero, comparativos anuais)
+	- Insights do perfil (alcance, impressões, seguidores ganhados, melhores horários)
+	- Sem anúncios (ad-free) e recursos visuais exclusivos
+	- Relatórios exportáveis (CSV/PNG) e histórico completo
+	- Filtros avançados na Explorar e ranking detalhado
 - Conteúdo patrocinado sinalizado
 - Autores verificados (badge)
+- Perfis verificados (assinatura) com selo distinto
 - Exportação de dados (LGPD) /backup
 - API pública versionada
+
+## 12. Integrações & Importação
+- Importação do Goodreads (CSV/API) — estantes, avaliações, progresso e resenhas
+- Exportação para Goodreads/CSV (espelhamento de dados essenciais)
+- Compartilhamento inteligente para X (cartões) e oEmbed de posts do X
+- Integração com lojas/livrarias para compra (links afiliados opcionais)
 
 ---
 ## Ondas (Waves) de Implementação
@@ -98,16 +127,16 @@ Status atual:
 - Próximos alvos recomendados: menções, notificações mínimas (follow/like), comentários encadeados
 
 ### Wave 2 (Engajamento & Descoberta)
-Hashtags, salvar item, reações múltiplas, trending simples, recomendações heurísticas iniciais.
+Hashtags, salvar item, reações múltiplas, trending simples, recomendações heurísticas iniciais, repost/quote e contador de visualizações.
 
 ### Wave 3 (Gamificação & Retenção)
-Sistema de pontos, badges, ranking semanal, desafios de leitura.
+Sistema de pontos, badges, ranking semanal, desafios de leitura, objetivo anual e estatísticas estilo Goodreads.
 
 ### Wave 4 (Moderação & Escala)
 Denúncias, bloqueios, rate limits, caching de contadores, jobs de feed.
 
 ### Wave 5 (Tempo Real & Premium)
-WebSockets, digest semanal, PWA push, exportação de dados.
+WebSockets, digest semanal, PWA push, exportação de dados, premium com estatísticas avançadas e ad-free.
 
 ---
 ## Estruturas de Tabelas (Esboços)

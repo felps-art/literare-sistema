@@ -2,9 +2,27 @@
 
 @section('content')
 <div class="row g-4">
+    <div class="col-12">
+        <div class="parchment-panel soft-shadow rounded-3 p-4 mb-2">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div>
+                    <h1 class="h4 brand-font mb-2" style="color: var(--old-ink);">
+                        <i class="fas fa-home me-2" style="color: var(--old-accent);"></i>Bem-vindo à Literare
+                    </h1>
+                    <p class="mb-0" style="color: var(--old-ink-muted);">
+                        Este é seu Início: um feed personalizado com atividades de quem você segue e conteúdos relevantes.
+                    </p>
+                </div>
+                <div class="text-nowrap">
+                    <a href="{{ route('resenhas.create') }}" class="btn btn-primary me-2"><i class="fas fa-plus me-1"></i>Nova Resenha</a>
+                    <a href="{{ route('posts.create') }}" class="btn btn-outline-primary"><i class="fas fa-edit me-1"></i>Novo Post</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-lg-8">
         <div class="parchment-panel soft-shadow mb-3 d-flex justify-content-between align-items-center">
-            <h1 class="h5 brand-font m-0" style="color:var(--old-ink);"><i class="fas fa-rss me-2" style="color:var(--old-accent);"></i>Feed</h1>
+            <h1 class="h5 brand-font m-0" style="color:var(--old-ink);"><i class="fas fa-home me-2" style="color:var(--old-accent);"></i>Início</h1>
         </div>
 
         @forelse($activities as $activity)
