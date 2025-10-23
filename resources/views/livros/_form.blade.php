@@ -2,22 +2,22 @@
 <div class="row g-4">
     <div class="col-md-6">
         <label class="form-label small fw-semibold">Título *</label>
-        <input type="text" name="titulo" value="{{ old('titulo', $livro->titulo ?? '') }}" required class="form-control form-control-sm" />
+        <input type="text" name="titulo" value="{{ old('titulo', $livro->titulo ?? '') }}" placeholder="Ex.: Dom Casmurro" required class="form-control form-control-sm" />
         @error('titulo')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
     </div>
     <div class="col-md-3">
         <label class="form-label small fw-semibold">Código *</label>
-        <input type="text" name="codigo_livro" value="{{ old('codigo_livro', $livro->codigo_livro ?? '') }}" required class="form-control form-control-sm" />
+        <input type="text" name="codigo_livro" value="{{ old('codigo_livro', $livro->codigo_livro ?? '') }}" placeholder="ISBN ou código interno" required class="form-control form-control-sm" />
         @error('codigo_livro')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
     </div>
     <div class="col-md-3">
         <label class="form-label small fw-semibold">Ano Publicação</label>
-        <input type="number" name="ano_publicacao" value="{{ old('ano_publicacao', $livro->ano_publicacao ?? '') }}" class="form-control form-control-sm" />
+        <input type="number" name="ano_publicacao" value="{{ old('ano_publicacao', $livro->ano_publicacao ?? '') }}" placeholder="Ex.: 1997" class="form-control form-control-sm" />
         @error('ano_publicacao')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
     </div>
     <div class="col-md-3">
         <label class="form-label small fw-semibold">Páginas</label>
-        <input type="number" name="numero_paginas" value="{{ old('numero_paginas', $livro->numero_paginas ?? '') }}" class="form-control form-control-sm" />
+        <input type="number" name="numero_paginas" value="{{ old('numero_paginas', $livro->numero_paginas ?? '') }}" placeholder="Ex.: 320" class="form-control form-control-sm" />
         @error('numero_paginas')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
     </div>
     <div class="col-md-3">
@@ -38,12 +38,12 @@
                 <option value="{{ $autor->id }}" @selected(in_array($autor->id, $selectedAutores))>{{ $autor->nome }}</option>
             @endforeach
         </select>
-        <div class="form-text">CTRL / SHIFT para múltiplos.</div>
+        <div class="form-text">Use CTRL/SHIFT para selecionar múltiplos autores.</div>
         @error('autores')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
     </div>
     <div class="col-md-9">
         <label class="form-label small fw-semibold d-flex justify-content-between"> <span>Sinopse</span> <span class="small text-muted" id="sinopse-counter"></span></label>
-        <textarea name="sinopse" rows="6" class="form-control" id="sinopse-text">{{ old('sinopse', $livro->sinopse ?? '') }}</textarea>
+        <textarea name="sinopse" rows="6" class="form-control" id="sinopse-text" placeholder="Escreva um breve resumo do livro...">{{ old('sinopse', $livro->sinopse ?? '') }}</textarea>
         @error('sinopse')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
     </div>
     <div class="col-md-3">
@@ -60,6 +60,7 @@
                 <img src="" class="w-100 h-100 object-fit-cover rounded d-none" id="capa-preview" />
             @endif
         </div>
+        <div class="form-text">Dica: imagens verticais ficam melhores (proporção ~2:3).</div>
         @error('imagem_capa')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
     </div>
 </div>

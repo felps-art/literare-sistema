@@ -86,6 +86,23 @@
                         @endif
                     </div>
                     <div style="white-space:pre-line; color:var(--old-ink);">{{ $comment->content }}</div>
+                    <div class="mt-1 d-flex justify-content-end">
+                        @auth
+                            <button
+                                class="btn btn-xs btn-outline-{{ $comment->isLikedBy(auth()->user()) ? 'danger' : 'secondary' }}"
+                                data-like
+                                data-type="resenha-comment"
+                                data-id="{{ $comment->id }}"
+                                data-state="{{ $comment->isLikedBy(auth()->user()) ? 'liked' : 'unliked' }}"
+                                style="--bs-btn-padding-y: .125rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                            >
+                                <i class="{{ $comment->isLikedBy(auth()->user()) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
+                                <span class="ms-1" data-like-count>{{ $comment->likesCount() }}</span>
+                            </button>
+                        @else
+                            <span class="small text-muted"><i class="far fa-heart"></i> <span class="ms-1">{{ $comment->likesCount() }}</span></span>
+                        @endauth
+                    </div>
                 </div>
             @empty
                 <div class="text-muted small">Nenhum comentário ainda.</div>

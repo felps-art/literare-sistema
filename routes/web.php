@@ -11,6 +11,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ResenhaCommentController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentLikeController;
+use App\Http\Controllers\ResenhaCommentLikeController;
 use App\Http\Controllers\EstanteController;
 use App\Http\Controllers\FeedController;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +62,12 @@ Route::delete('posts/{post}/like',[LikeController::class,'destroy'])->middleware
 // Likes em resenhas
 Route::post('resenhas/{resenha}/like',[App\Http\Controllers\ResenhaLikeController::class,'store'])->middleware(['auth'])->name('resenhas.like');
 Route::delete('resenhas/{resenha}/like',[App\Http\Controllers\ResenhaLikeController::class,'destroy'])->middleware(['auth'])->name('resenhas.unlike');
+
+// Likes em comentários
+Route::post('comments/{comment}/like',[CommentLikeController::class,'store'])->middleware(['auth'])->name('comments.like');
+Route::delete('comments/{comment}/like',[CommentLikeController::class,'destroy'])->middleware(['auth'])->name('comments.unlike');
+Route::post('resenha-comments/{comment}/like',[ResenhaCommentLikeController::class,'store'])->middleware(['auth'])->name('resenha-comments.like');
+Route::delete('resenha-comments/{comment}/like',[ResenhaCommentLikeController::class,'destroy'])->middleware(['auth'])->name('resenha-comments.unlike');
 
 // Sistema Follow/Unfollow
 Route::post('users/{user}/follow',[App\Http\Controllers\FollowController::class,'store'])->middleware(['auth'])->name('users.follow');

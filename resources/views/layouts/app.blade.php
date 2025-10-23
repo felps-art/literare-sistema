@@ -291,13 +291,15 @@
         if(!document.querySelector('meta[name="csrf-token"]')) return;
         e.preventDefault();
         if(btn.dataset.loading === '1') return;
-        const type = btn.dataset.type; // post | resenha
+    const type = btn.dataset.type; // post | resenha | comment | resenha-comment
         const id = btn.dataset.id;
         const liked = btn.dataset.state === 'liked';
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         let url = '';
-        if(type === 'post') url = '/posts/' + id + '/like';
-        else if(type === 'resenha') url = '/resenhas/' + id + '/like';
+    if(type === 'post') url = '/posts/' + id + '/like';
+    else if(type === 'resenha') url = '/resenhas/' + id + '/like';
+    else if(type === 'comment') url = '/comments/' + id + '/like';
+    else if(type === 'resenha-comment') url = '/resenha-comments/' + id + '/like';
         else return;
         const method = liked ? 'DELETE' : 'POST';
         const icon = btn.querySelector('i');

@@ -11,6 +11,9 @@ use App\Models\Resenha;
 use App\Models\UsuarioLivroStatus;
 use App\Models\Livro;
 use App\Models\ResenhaComment;
+use App\Models\Comment;
+use App\Models\ResenhaCommentLike;
+use App\Models\CommentLike;
 
 class User extends Authenticatable
 {
@@ -144,6 +147,22 @@ class User extends Authenticatable
     public function likedResenhas(): BelongsToMany
     {
         return $this->belongsToMany(Resenha::class, 'resenha_likes', 'user_id', 'resenha_id')->withTimestamps();
+    }
+
+    /**
+     * Comentários em posts curtidos pelo usuário.
+     */
+    public function likedComments(): BelongsToMany
+    {
+        return $this->belongsToMany(Comment::class, 'comment_likes', 'user_id', 'comment_id')->withTimestamps();
+    }
+
+    /**
+     * Comentários de resenhas curtidos pelo usuário.
+     */
+    public function likedResenhaComments(): BelongsToMany
+    {
+        return $this->belongsToMany(ResenhaComment::class, 'resenha_comment_likes', 'user_id', 'resenha_comment_id')->withTimestamps();
     }
 
     /**

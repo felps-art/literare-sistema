@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Comment extends Model
 {
@@ -29,6 +30,31 @@ class Comment extends Model
     public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class);
+    }
+
+    /**
+     * Curtidas recebidas por este comentário.
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(CommentLike::class);
+    }
+
+    /**
+     * Verifica se foi curtido por um usuário.
+     */
+    public function isLikedBy(?User $user): bool
+    {
+        if (!$user) return false;
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Quantidade de curtidas.
+     */
+    public function likesCount(): int
+    {
+        return $this->likes()->count();
     }
 }
 
