@@ -140,9 +140,9 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary @if(request()->routeIs('dashboard.home') && !auth()->check()) d-none @endif">
         <div class="container">
-            <a class="navbar-brand brand-font" href="{{ auth()->check() && auth()->user()->is_admin ? route('dashboard') : route('feed.index') }}">
+            <a class="navbar-brand brand-font" href="{{ auth()->check() && auth()->user()->is_admin ? route('dashboard') : (auth()->check() ? route('feed.index') : route('dashboard.home')) }}">
                 <i class="fas fa-book-open me-2"></i>Literare
             </a>
             
@@ -166,11 +166,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('posts.index') }}">
                                 <i class="fas fa-comments me-1"></i>Posts
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('resenhas.index') }}">
-                                <i class="fas fa-star me-1"></i>Resenhas
                             </a>
                         </li>
                         <li class="nav-item">
@@ -204,11 +199,6 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('resenhas.create') }}">
-                                        <i class="fas fa-plus me-2"></i>Nova Resenha
-                                    </a>
-                                </li>
-                                <li>
                                     <a class="dropdown-item" href="{{ route('posts.create') }}">
                                         <i class="fas fa-edit me-2"></i>Novo Post
                                     </a>
@@ -231,6 +221,13 @@
                                 <i class="fas fa-sign-in-alt me-1"></i>Entrar
                             </a>
                         </li>
+                        @if (Route::has('register'))
+                        <li class="nav-item ms-2">
+                            <a class="nav-link btn btn-outline-light px-3" href="{{ route('register') }}">
+                                <i class="fas fa-user-plus me-1"></i>Cadastrar
+                            </a>
+                        </li>
+                        @endif
                     @endauth
                 </ul>
             </div>
@@ -265,7 +262,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
+    <footer class="bg-dark text-light py-4 mt-5 @if(request()->routeIs('dashboard.home') && !auth()->check()) d-none @endif">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">

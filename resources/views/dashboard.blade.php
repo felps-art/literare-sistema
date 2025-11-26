@@ -103,9 +103,22 @@
                                class="btn btn-sm btn-outline-primary">
                                 <i class="fas fa-eye me-1"></i>Ler mais
                             </a>
-                            <div class="text-muted small">
-                                <i class="fas fa-heart text-danger me-1"></i>{{ $resenha->likesCount() }}
-                                <i class="fas fa-comment ms-3 me-1"></i>{{ $resenha->comments->count() }}
+                            <div class="d-flex align-items-center gap-3 small">
+                                @auth
+                                <a href="#" class="text-muted text-decoration-none"
+                                   data-like data-type="resenha" data-id="{{ $resenha->id }}"
+                                   data-state="{{ auth()->user()->likedResenhas->contains($resenha->id) ? 'liked' : 'unliked' }}">
+                                    <i class="{{ auth()->user()->likedResenhas->contains($resenha->id) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
+                                    <span data-like-count>{{ $resenha->likesCount() }}</span>
+                                </a>
+                                @else
+                                <span class="text-muted">
+                                    <i class="fas fa-heart text-danger me-1"></i>{{ $resenha->likesCount() }}
+                                </span>
+                                @endauth
+                                <a href="{{ route('resenhas.show', $resenha->id) }}#comments" class="text-muted text-decoration-none">
+                                    <i class="fas fa-comment me-1"></i>{{ $resenha->comments->count() }}
+                                </a>
                             </div>
                         </div>
                     </div>

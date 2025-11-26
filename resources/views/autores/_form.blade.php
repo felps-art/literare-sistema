@@ -1,32 +1,80 @@
 @csrf
-<div class="space-y-4">
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Nome *</label>
-        <input type="text" name="nome" value="{{ old('nome', $autor->nome ?? '') }}" required
-               class="w-full border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
-        @error('nome')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+@php($isEdit = isset($autor))
+<div class="parchment-panel soft-shadow mb-3">
+    <h2 class="h5 brand-font mb-2"><i class="fas fa-feather-alt me-2"></i>{{ $isEdit ? 'Editar Autor' : 'Cadastrar Autor' }}</h2>
+    <p class="text-muted small m-0">Campos obrigatórios marcados com * | Código usado como identificador único.</p>
+</div>
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <strong><i class="fas fa-exclamation-triangle me-1"></i>Erros encontrados:</strong>
+        <ul class="mb-0 mt-2 small">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
     </div>
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Código *</label>
-        <input type="text" name="codigo" value="{{ old('codigo', $autor->codigo ?? '') }}" required
-               class="w-full border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" />
-        @error('codigo')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
-    </div>
-    <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Biografia</label>
-        <textarea name="biografia" rows="6" class="w-full border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">{{ old('biografia', $autor->biografia ?? '') }}</textarea>
-        @error('biografia')<p class="text-xs text-red-600 mt-1">{{ $message }}</p>@enderror
+@endif
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome *</label>
+            <input type="text" name="nome" id="nome" class="form-control @error('nome') is-invalid @enderror" value="{{ old('nome', $autor->nome ?? '') }}" placeholder="Ex: Machado de Assis" required>
+            @error('nome')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+        <div class="mb-3">
+            <label for="codigo" class="form-label">Código Único *</label>
+            <input type="text" name="codigo" id="codigo" class="form-control @error('codigo') is-invalid @enderror" value="{{ old('codigo', $autor->codigo ?? '') }}" placeholder="ex: machado-assis" required>
+            <div class="form-text">Gerado automaticamente a partir do nome se você não alterar.</div>
+            @error('codigo')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
+        <div class="mb-3">
+            <label for="biografia" class="form-label">Biografia</label>
+            <textarea name="biografia" id="biografia" rows="5" class="form-control @error('biografia') is-invalid @enderror" placeholder="Resumo da carreira, prêmios, estilo literário...">{{ old('biografia', $autor->biografia ?? '') }}</textarea>
+            @error('biografia')<div class="invalid-feedback">{{ $message }}</div>@enderror
+            <div class="small text-muted mt-1"><span id="bio-count">0</span> caracteres</div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="{{ isset($autor) ? route('autores.show',$autor) : route('autores.index') }}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Cancelar</a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-1"></i>{{ $isEdit ? 'Atualizar' : 'Salvar' }}
+            </button>
+        </div>
     </div>
 </div>
-<div class="mt-6 flex justify-end space-x-3">
-    @if(auth()->check() && auth()->user()->is_admin)
-        @if(isset($autor))
-            <a href="{{ route('autores.show', $autor) }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</a>
-        @else
-            <a href="{{ route('autores.index') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</a>
-        @endif
-    @else
-        <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancelar</a>
-    @endif
-    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Salvar</button>
-</div>
+
+@push('scripts')
+<script>
+(function(){
+    const nome = document.getElementById('nome');
+    const codigo = document.getElementById('codigo');
+    const bio = document.getElementById('biografia');
+    const bioCount = document.getElementById('bio-count');
+    const userEditedCodigo = !!codigo.value.trim();
+    function slugify(str){
+        return str
+            .toLowerCase()
+            .normalize('NFD').replace(/\p{Diacritic}/gu,'')
+            .replace(/[^a-z0-9]+/g,'-')
+            .replace(/^-+|-+$/g,'')
+            .substring(0,100);
+    }
+    if(nome){
+        nome.addEventListener('input',()=>{
+            if(!userEditedCodigo && (!codigo.value || codigo.dataset.autofill==='1')){
+                codigo.dataset.autofill='1';
+                codigo.value = slugify(nome.value);
+            }
+        });
+    }
+    if(codigo){
+        codigo.addEventListener('input',()=>{codigo.dataset.autofill='0';});
+    }
+    if(bio && bioCount){
+        const updateCount=()=>{bioCount.textContent=bio.value.length};
+        bio.addEventListener('input',updateCount);updateCount();
+    }
+})();
+</script>
+@endpush

@@ -45,6 +45,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        // Após cadastro, enviar sempre para o feed
+        return redirect()->to(route('feed.index', absolute: false));
     }
 }

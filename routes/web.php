@@ -19,10 +19,17 @@ use Illuminate\Support\Facades\Route;
 
 // Página inicial e dashboard principal
 Route::get('/', function () {
-    // Redireciona usuários logados não-admins para Início
+    // Visitante (não autenticado) vê página inicial com CTA de cadastro/login
+    if (!auth()->check()) {
+        return view('welcome');
+    }
+
+    // Usuário autenticado não-admin vai para o feed
     if (auth()->check() && !auth()->user()->is_admin) {
         return redirect()->route('feed.index');
     }
+
+    // Admin vê o dashboard
     return app(DashboardController::class)->index(request());
 })->name('dashboard.home');
 
@@ -83,7 +90,9 @@ Route::get('/explorar', [FeedController::class,'explore'])->middleware(['auth'])
 Route::resource('livros', LivroController::class);
 Route::resource('autores', AutorController::class);
 Route::resource('editoras', EditoraController::class);
-Route::resource('posts', PostController::class)->middleware(['auth']);
+Route::resource('posts', PostController::class)
+    ->except(['edit','update'])
+    ->middleware(['auth']);
 // Estante (status de leitura e avaliação)
 Route::post('livros/{livro}/estante', [EstanteController::class, 'store'])->middleware(['auth'])->name('livros.estante.store');
 Route::delete('livros/{livro}/estante', [EstanteController::class, 'destroy'])->middleware(['auth'])->name('livros.estante.destroy');
@@ -92,8 +101,3 @@ Route::get('/estante', [EstanteController::class, 'index'])->middleware(['auth']
 // Comentários em posts
 Route::post('posts/{post}/comments', [CommentController::class, 'store'])->middleware(['auth'])->name('posts.comments.store');
 Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->middleware(['auth'])->name('comments.destroy');
-
-// Rota de fallback para SPA (se estiver usando Vue/React)
-Route::get('/{any}', function () {
-    return view('dashboard');
-})->where('any', '.*');

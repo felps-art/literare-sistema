@@ -28,7 +28,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Após login, enviar sempre para o feed
+        return redirect()->to(route('feed.index', absolute: false));
     }
 
     /**

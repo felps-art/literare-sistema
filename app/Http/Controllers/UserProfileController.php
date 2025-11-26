@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Resenha;
+use App\Models\Post;
 use App\Models\UsuarioLivroStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,12 +53,12 @@ class UserProfileController extends Controller
     {
         $user = User::findOrFail($id);
         
-        $resenhas = Resenha::with('livro')
+        $posts = Post::with(['user', 'photos', 'likes', 'comments'])
             ->where('user_id', $id)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('users.posts', compact('user', 'resenhas'));
+        return view('users.posts', compact('user', 'posts'));
     }
 
     /**
@@ -79,7 +80,7 @@ class UserProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         if ($request->hasFile('foto_perfil')) {

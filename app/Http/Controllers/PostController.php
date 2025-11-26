@@ -16,7 +16,7 @@ class PostController extends Controller
     {
         $posts = Post::with(['user','photos','likes'])
             ->latest()
-            ->paginate(15);
+            ->paginate(100);
         return view('posts.index', compact('posts'));
     }
 
