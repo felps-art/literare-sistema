@@ -10,8 +10,8 @@ use Illuminate\Support\Collection;
 class FeedService
 {
     /**
-     * Busca atividades para o feed personalizado
-     * Tipos considerados: post_created, resenha_created, reading_progress_created, reading_progress_updated
+     * Busca atividades para o feed personalizado.
+     * Somente tipos de criação de conteúdo principal: post_created, resenha_created.
      * @param User|null $user
      * @param int $limit
      * @param int|null $cursor id da activity para cursor pagination (infinite scroll)
@@ -28,8 +28,6 @@ class FeedService
         $types = [
             'post_created',
             'resenha_created',
-            'reading_progress_created',
-            'reading_progress_updated',
         ];
 
         $query = Activity::with(['user','subject'])

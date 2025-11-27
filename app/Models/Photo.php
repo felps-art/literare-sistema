@@ -39,18 +39,19 @@ class Photo extends Model
         if ($path === '') {
             return asset('img/default-post.png');
         }
+        // Caminhos absolutos ou URLs já prontos
         if (Str::startsWith($path, ['http://','https://','/'])) {
             return $path;
         }
-        // Se existir no disco público
+        // Verifica no disco público; usa fallback direto /storage/<path> para evitar problemas de APP_URL
         try {
             if (Storage::disk('public')->exists($path)) {
-                return Storage::url($path);
+                return '/storage/' . ltrim($path,'/');
             }
         } catch (\Throwable $e) {
-            // ignora e segue para fallback
+            // silencioso
         }
-        // Fallback para /img/<arquivo> (padrões do projeto ficam em public/img)
+        // Último fallback para pasta de imagens estáticas
         return asset('img/'.$path);
     }
 }

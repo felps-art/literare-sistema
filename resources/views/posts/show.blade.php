@@ -11,7 +11,6 @@
         </div>
         <div class="d-flex gap-2">
             @if(auth()->check() && $post->user_id === auth()->id())
-                <a href="{{ route('posts.edit',$post) }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit me-1"></i>Editar</a>
                 <form action="{{ route('posts.destroy',$post) }}" method="POST" onsubmit="return confirm('Excluir este post?');">
                     @csrf
                     @method('DELETE')

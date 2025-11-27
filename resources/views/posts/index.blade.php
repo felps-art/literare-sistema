@@ -28,7 +28,7 @@
                 <div class="row g-2 mb-2">
                     @foreach($post->photos->take(4) as $photo)
                         <div class="col-6 col-md-3">
-                            <img src="{{ $photo->url }}" class="img-fluid rounded" style="height:130px; object-fit:cover; width:100%;"/>
+                            <img src="{{ $photo->url }}" class="img-fluid rounded" style="height:130px; object-fit:cover; width:100%;" loading="lazy" onerror="this.src='{{ asset('img/default-post.png') }}'"/>
                         </div>
                     @endforeach
                 </div>

@@ -169,8 +169,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('estante.index') }}">
-                                <i class="fas fa-books me-1"></i>Estante
+                            <a class="nav-link" href="{{ route('estante.index') }}" title="Minha Estante">
+                                <i class="fas fa-bookmark me-1"></i>Estante
                             </a>
                         </li>
                         <!-- Links de Livros e Usuários removidos da navbar superior -->
